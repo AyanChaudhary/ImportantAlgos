@@ -18,8 +18,6 @@ public:
                 r=i+p[i];
             }
         }
-        // for(auto ch : p)cout<<ch<<" ";
-        // cout<<endl;
     }
     manacher(string s=""){
         string t;
