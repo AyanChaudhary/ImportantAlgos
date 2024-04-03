@@ -28,7 +28,7 @@ public:
     }
     int longestPalin(int cen,bool odd){
         int pos=2*cen+1+(!odd);
-        return p[pos];
+        return p[pos]-1;
     }
     bool checkPalin(int l,int r){
         if(r-l+1<=longestPalin((l+r)>>1,l%2==r%2))
