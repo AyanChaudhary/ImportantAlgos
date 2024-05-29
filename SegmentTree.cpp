@@ -69,3 +69,58 @@ public:
         seg[idx]=(seg[2*idx+1]+seg[2*idx+2]);
     }
 };
+
+// more general
+struct node{
+    int even;
+    int odd;
+    node(int ev=0,int od=0){
+        even=ev;
+        odd=od;
+    }
+};
+class SGTree{
+    vector<node>seg;
+public:
+    SGTree(int n){
+        seg.resize(4*n);
+    }
+    node merge(node a,node b){
+        return node(a.even+b.even,a.odd+b.odd);
+    }
+    void build(int idx,int low,int high,vector<int>&a){
+        if(low==high){
+            int o=0,e=0;
+            if(a[low]%2)o++;
+            else e++;
+            seg[idx]=node(e,o);
+            return;
+        }
+        int mid=(low+high)>>1;
+        build(2*idx+1,low,mid,a);
+        build(2*idx+2,mid+1,high,a);
+        seg[idx]=merge(seg[2*idx+1],seg[2*idx+2]);
+    }
+    node query(int idx,int low,int high,int l,int r){
+        if(low>r || high<l)return node();
+        else if(low>=l && high <=r)return seg[idx];
+        int mid=(low+high)>>1;
+        return merge(query(2*idx+1,low,mid,l,r),query(2*idx+2,mid+1,high,l,r));
+    }
+    void update(int idx,int low,int high,int pos,int val){
+        if(pos<low || pos>high)return;
+        if(low==high){
+            int od=0,ev=0;
+            if(val%2)od++;
+            else ev++;
+            seg[idx].odd=od;
+            seg[idx].even=ev;
+            return;
+        }
+        int mid=(low+high)>>1;
+        update(2*idx+1,low,mid,pos,val);
+        update(2*idx+2,mid+1,high,pos,val);
+        seg[idx]=merge(seg[2*idx+1],seg[2*idx+2]);
+    }
+};
+
